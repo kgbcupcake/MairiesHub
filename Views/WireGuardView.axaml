@@ -1,0 +1,134 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:MairiesHub.ViewModels"
+             xmlns:models="using:MairiesHub.Models"
+             x:Class="MairiesHub.Views.WireGuardView"
+             x:DataType="vm:WireGuardViewModel"
+             Background="#0a0d14">
+
+    <Grid RowDefinitions="Auto,Auto,Auto,Auto,*" Margin="20,16,20,16" VerticalAlignment="Stretch">
+
+        <!-- Header -->
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,14">
+            <StackPanel Orientation="Vertical" Spacing="0" VerticalAlignment="Center">
+                <TextBlock Text="WIREGUARD"
+                           FontFamily="Rajdhani,monospace"
+                           FontSize="28"
+                           FontWeight="Bold"
+                           Foreground="#e2e8f0"
+                           LetterSpacing="4" />
+                <Border Height="1.5"
+                        Background="#22d3ee"
+                        HorizontalAlignment="Left"
+                        Width="150"
+                        Margin="0,3,0,0" />
+            </StackPanel>
+
+            <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+                <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center"
+                            IsVisible="{Binding IsLoading}">
+                    <Ellipse Width="6" Height="6" Fill="#22d3ee" />
+                    <TextBlock Text="Refreshing"
+                               FontFamily="Courier New,monospace"
+                               FontSize="11"
+                               Foreground="#475569"
+                               VerticalAlignment="Center" />
+                </StackPanel>
+                <Border CornerRadius="2"
+                        Padding="6,2"
+                        VerticalAlignment="Center">
+                    <Border.Background>
+                        <Binding Path="WgStatus" Converter="{StaticResource StateToColorConverter}" />
+                    </Border.Background>
+                    <TextBlock Text="{Binding WgStatus}"
+                               FontSize="11"
+                               FontWeight="SemiBold"
+                               Foreground="#0a0d14" />
+                </Border>
+            </StackPanel>
+        </Grid>
+
+        <!-- Horizontal rule -->
+        <Border Grid.Row="1"
+                Height="1"
+                Background="#4d22d3ee"
+                Margin="0,0,0,12" />
+
+        <!-- Peer count -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="6" Margin="0,0,0,16">
+            <TextBlock Text="Peers:" FontSize="13" Foreground="#757575" VerticalAlignment="Center" />
+            <TextBlock Text="{Binding PeerCount}" FontSize="13" Foreground="#e0e0e0" VerticalAlignment="Center" />
+        </StackPanel>
+
+        <!-- Column headers -->
+        <Grid Grid.Row="3"
+              ColumnDefinitions="120,*,150,150,100"
+              Margin="10,0,0,6">
+            <TextBlock Grid.Column="0" Text="PUBLIC KEY"      Classes="ColHeader" />
+            <TextBlock Grid.Column="1" Text="ENDPOINT"        Classes="ColHeader" />
+            <TextBlock Grid.Column="2" Text="ALLOWED IPs"     Classes="ColHeader" />
+            <TextBlock Grid.Column="3" Text="LAST HANDSHAKE"  Classes="ColHeader" />
+            <TextBlock Grid.Column="4" Text="TRANSFER"        Classes="ColHeader" />
+        </Grid>
+
+        <!-- Peers list -->
+        <ScrollViewer Grid.Row="4" VerticalScrollBarVisibility="Auto">
+            <ItemsControl ItemsSource="{Binding Peers}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="models:WireGuardPeer">
+                        <Border Classes="RowSep">
+                            <Grid ColumnDefinitions="120,*,150,150,100" VerticalAlignment="Center">
+
+                                <!-- Short public key -->
+                                <TextBlock Grid.Column="0"
+                                           Text="{Binding ShortKey}"
+                                           FontFamily="Monospace"
+                                           FontSize="12"
+                                           Foreground="#9e9e9e"
+                                           VerticalAlignment="Center" />
+
+                                <!-- Endpoint -->
+                                <TextBlock Grid.Column="1"
+                                           Text="{Binding Endpoint, FallbackValue=—}"
+                                           FontSize="12"
+                                           Foreground="#e0e0e0"
+                                           TextTrimming="CharacterEllipsis"
+                                           VerticalAlignment="Center" />
+
+                                <!-- Allowed IPs -->
+                                <TextBlock Grid.Column="2"
+                                           Text="{Binding AllowedIpsDisplay}"
+                                           Classes="Muted"
+                                           TextTrimming="CharacterEllipsis"
+                                           VerticalAlignment="Center" />
+
+                                <!-- Last handshake -->
+                                <TextBlock Grid.Column="3"
+                                           Text="{Binding LatestHandshake, FallbackValue=—}"
+                                           Classes="Muted"
+                                           TextTrimming="CharacterEllipsis"
+                                           VerticalAlignment="Center" />
+
+                                <!-- Transfer (raw string from API) -->
+                                <TextBlock Grid.Column="4"
+                                           Text="{Binding TransferRaw, FallbackValue=—}"
+                                           Classes="Muted"
+                                           TextTrimming="CharacterEllipsis"
+                                           VerticalAlignment="Center" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+
+        <!-- Empty state -->
+        <TextBlock Grid.Row="4"
+                   Text="No peers connected"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Foreground="#424242"
+                   FontSize="14"
+                   IsVisible="{Binding !Peers.Count}" />
+    </Grid>
+</UserControl>

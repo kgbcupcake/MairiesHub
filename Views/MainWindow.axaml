@@ -1,0 +1,217 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:MairiesHub.ViewModels"
+        xmlns:controls="using:MairiesHub.Controls"
+        xmlns:conv="using:MairiesHub.Converters"
+        x:Class="MairiesHub.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Title="MairiesHub"
+        Width="1200" Height="760"
+        MinWidth="900" MinHeight="600"
+        Background="#0d0d14"
+        ExtendClientAreaToDecorationsHint="False">
+
+    <Grid RowDefinitions="56,*">
+
+        <!-- ══════════════════════  TOP STATS BAR  ══════════════════════ -->
+        <Border Grid.Row="0"
+                MinHeight="56"
+                ZIndex="10"
+                Background="#13131c"
+                BorderBrush="#1e1e2d"
+                BorderThickness="0,0,0,1">
+            <Grid ColumnDefinitions="Auto,*,Auto">
+
+                <!-- App title -->
+                <StackPanel Grid.Column="0"
+                            Orientation="Horizontal"
+                            VerticalAlignment="Center"
+                            Margin="18,0,0,0"
+                            Spacing="8">
+                    <Ellipse Width="8" Height="8" Fill="#00bcd4" />
+                    <TextBlock Text="MairiesHub"
+                               FontSize="15"
+                               FontWeight="SemiBold"
+                               Foreground="#00bcd4"
+                               VerticalAlignment="Center" />
+                </StackPanel>
+
+                <!-- ECG + live stats (centred) -->
+                <StackPanel Grid.Column="1"
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Spacing="24">
+
+                    <!-- CPU -->
+                    <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                        <controls:EcgHeartbeatControl x:Name="CpuHeartbeat"
+                                                      Width="90" Height="32"
+                                                      SampleCapacity="60" />
+                        <StackPanel VerticalAlignment="Center" Spacing="1">
+                            <TextBlock Text="CPU" Classes="SectionHeader" />
+                            <TextBlock FontSize="13" Foreground="#e0e0e0">
+                                <TextBlock.Text>
+                                    <Binding Path="SystemVm.CpuPercent" StringFormat="{}{0:F0}%" />
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!-- Separator -->
+                    <Rectangle Width="1" Height="28" Fill="#252535" />
+
+                    <!-- RAM -->
+                    <StackPanel VerticalAlignment="Center" Spacing="1">
+                        <TextBlock Text="RAM" Classes="SectionHeader" />
+                        <StackPanel Orientation="Horizontal" Spacing="4">
+                            <TextBlock FontSize="13" Foreground="#e0e0e0">
+                                <TextBlock.Text>
+                                    <Binding Path="SystemVm.RamUsedGb" StringFormat="{}{0:F1}" />
+                                </TextBlock.Text>
+                            </TextBlock>
+                            <TextBlock Classes="Muted" VerticalAlignment="Bottom">/</TextBlock>
+                            <TextBlock Classes="Muted" VerticalAlignment="Bottom">
+                                <TextBlock.Text>
+                                    <Binding Path="SystemVm.RamTotalGb" StringFormat="{}{0:F0} GB" />
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!-- Separator -->
+                    <Rectangle Width="1" Height="28" Fill="#252535" />
+
+                    <!-- Disk -->
+                    <StackPanel VerticalAlignment="Center" Spacing="1">
+                        <TextBlock Text="DISK" Classes="SectionHeader" />
+                        <StackPanel Orientation="Horizontal" Spacing="4">
+                            <TextBlock FontSize="13" Foreground="#e0e0e0">
+                                <TextBlock.Text>
+                                    <Binding Path="SystemVm.DiskUsedGb" StringFormat="{}{0:F0}" />
+                                </TextBlock.Text>
+                            </TextBlock>
+                            <TextBlock Classes="Muted" VerticalAlignment="Bottom">/</TextBlock>
+                            <TextBlock Classes="Muted" VerticalAlignment="Bottom">
+                                <TextBlock.Text>
+                                    <Binding Path="SystemVm.DiskTotalGb" StringFormat="{}{0:F0} GB" />
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!-- Separator -->
+                    <Rectangle Width="1" Height="28" Fill="#252535" />
+
+                    <!-- Uptime -->
+                    <StackPanel VerticalAlignment="Center" Spacing="1">
+                        <TextBlock Text="UPTIME" Classes="SectionHeader" />
+                        <StackPanel Orientation="Horizontal" Spacing="2">
+                            <TextBlock FontSize="13" Foreground="#e0e0e0">
+                                <TextBlock.Text>
+                                    <Binding Path="SystemVm.UptimeDays" StringFormat="{}{0}d" />
+                                </TextBlock.Text>
+                            </TextBlock>
+                            <TextBlock FontSize="13" Foreground="#757575" Margin="2,0,0,0">
+                                <TextBlock.Text>
+                                    <Binding Path="SystemVm.UptimeHours" StringFormat="{}{0}h" />
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- Connection indicator -->
+                <StackPanel Grid.Column="2"
+                            Orientation="Horizontal"
+                            VerticalAlignment="Center"
+                            Margin="0,0,16,0"
+                            Spacing="6">
+                    <Ellipse Width="7" Height="7"
+                             Fill="{Binding SystemVm.IsConnected,
+                                   Converter={x:Static conv:StateToColorConverter.Instance},
+                                   ConverterParameter=running}" />
+                    <TextBlock Text="{Binding SystemVm.IsConnected,
+                                     Converter={x:Static conv:StateToColorConverter.Instance}}"
+                               Classes="Muted"
+                               IsVisible="False" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- ══════════════════════  SIDEBAR + CONTENT  ══════════════════════ -->
+        <Grid Grid.Row="1" ColumnDefinitions="160,*">
+
+            <!-- ── Left sidebar ── -->
+            <Border Grid.Column="0"
+                    Background="#0f0f18"
+                    BorderBrush="#1e1e2d"
+                    BorderThickness="0,0,1,0">
+                <StackPanel Margin="6,12,6,0" Spacing="2">
+
+                    <!-- Docker -->
+                    <Grid>
+                        <Rectangle Width="3" HorizontalAlignment="Left"
+                                   Fill="#00bcd4" VerticalAlignment="Stretch"
+                                   IsVisible="{Binding CurrentPageName,
+                                               Converter={StaticResource StringEqualsConverter},
+                                               ConverterParameter=Docker}" />
+                        <Button Classes="NavBtn"
+                                Content="Docker"
+                                Command="{Binding NavigateToCommand}"
+                                CommandParameter="Docker"
+                                Margin="3,0,0,0" />
+                    </Grid>
+
+                    <!-- Services -->
+                    <Grid>
+                        <Rectangle Width="3" HorizontalAlignment="Left"
+                                   Fill="#00bcd4" VerticalAlignment="Stretch"
+                                   IsVisible="{Binding CurrentPageName,
+                                               Converter={StaticResource StringEqualsConverter},
+                                               ConverterParameter=Services}" />
+                        <Button Classes="NavBtn"
+                                Content="Services"
+                                Command="{Binding NavigateToCommand}"
+                                CommandParameter="Services"
+                                Margin="3,0,0,0" />
+                    </Grid>
+
+                    <!-- WireGuard -->
+                    <Grid>
+                        <Rectangle Width="3" HorizontalAlignment="Left"
+                                   Fill="#00bcd4" VerticalAlignment="Stretch"
+                                   IsVisible="{Binding CurrentPageName,
+                                               Converter={StaticResource StringEqualsConverter},
+                                               ConverterParameter=WireGuard}" />
+                        <Button Classes="NavBtn"
+                                Content="WireGuard"
+                                Command="{Binding NavigateToCommand}"
+                                CommandParameter="WireGuard"
+                                Margin="3,0,0,0" />
+                    </Grid>
+
+                    <!-- Ollama -->
+                    <Grid>
+                        <Rectangle Width="3" HorizontalAlignment="Left"
+                                   Fill="#00bcd4" VerticalAlignment="Stretch"
+                                   IsVisible="{Binding CurrentPageName,
+                                               Converter={StaticResource StringEqualsConverter},
+                                               ConverterParameter=Ollama}" />
+                        <Button Classes="NavBtn"
+                                Content="Ollama"
+                                Command="{Binding NavigateToCommand}"
+                                CommandParameter="Ollama"
+                                Margin="3,0,0,0" />
+                    </Grid>
+
+                </StackPanel>
+            </Border>
+
+            <!-- ── Main content area ── -->
+            <ContentControl Grid.Column="1"
+                            Content="{Binding CurrentPage}"
+                            Margin="0" />
+        </Grid>
+    </Grid>
+</Window>

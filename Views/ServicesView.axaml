@@ -1,0 +1,239 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:MairiesHub.ViewModels"
+             xmlns:models="using:MairiesHub.Models"
+             xmlns:conv="using:MairiesHub.Converters"
+             xmlns:ctrl="using:MairiesHub.Controls"
+             x:Class="MairiesHub.Views.ServicesView"
+             x:DataType="vm:ServicesViewModel"
+             Background="#080c14">
+
+    <UserControl.Resources>
+        <conv:CyberpunkStateConverter x:Key="CyberpunkStateConverter" />
+        <conv:BoolToHealthConverter x:Key="BoolToHealthConverter" />
+    </UserControl.Resources>
+
+    <UserControl.Styles>
+
+        <!-- Card shell -->
+        <Style Selector="Border.ServiceCard">
+            <Setter Property="Background" Value="#0d1117" />
+            <Setter Property="BorderBrush" Value="#1e2d3d" />
+            <Setter Property="BoxShadow" Value="0 2 8 0 #40000000" />
+            <Setter Property="Transitions">
+                <Transitions>
+                    <BrushTransition Property="BorderBrush" Duration="0:0:0.15" />
+                    <BrushTransition Property="Background" Duration="0:0:0.15" />
+                </Transitions>
+            </Setter>
+        </Style>
+        <Style Selector="Border.ServiceCard:pointerover">
+            <Setter Property="BorderBrush" Value="#4422d3ee" />
+            <Setter Property="Background" Value="#0f1520" />
+            <Setter Property="BoxShadow" Value="0 4 16 0 #2222d3ee" />
+        </Style>
+
+        <!-- Card header stripe -->
+        <Style Selector="Border.CardHeader">
+            <Setter Property="Background" Value="#0a1020" />
+            <Setter Property="Padding" Value="12,10" />
+        </Style>
+
+        <!-- Card body -->
+        <Style Selector="Border.CardBody">
+            <Setter Property="Padding" Value="12,10" />
+        </Style>
+
+        <!-- Status pill — running -->
+        <Style Selector="Border.PillRunning">
+            <Setter Property="Background" Value="#0a2a1a" />
+            <Setter Property="BorderBrush" Value="#14532d" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="3" />
+            <Setter Property="Padding" Value="6,2" />
+        </Style>
+
+        <!-- Status pill — stopped -->
+        <Style Selector="Border.PillStopped">
+            <Setter Property="Background" Value="#1a0a0a" />
+            <Setter Property="BorderBrush" Value="#4a1010" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="3" />
+            <Setter Property="Padding" Value="6,2" />
+        </Style>
+
+    </UserControl.Styles>
+
+    <Grid RowDefinitions="Auto,Auto,*" Margin="20,16,20,16">
+
+        <!-- Page header -->
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,10">
+            <StackPanel Orientation="Vertical" Spacing="0" VerticalAlignment="Center">
+                <TextBlock Text="SERVICES"
+                           FontFamily="Rajdhani,monospace"
+                           FontSize="28"
+                           FontWeight="Bold"
+                           Foreground="#e2e8f0"
+                           LetterSpacing="4" />
+                <Border Height="1.5"
+                        Background="#22d3ee"
+                        HorizontalAlignment="Left"
+                        Width="120"
+                        Margin="0,3,0,0" />
+            </StackPanel>
+            <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+                <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center"
+                            IsVisible="{Binding IsLoading}">
+                    <Ellipse Width="6" Height="6" Fill="#22d3ee" />
+                    <TextBlock Text="Refreshing"
+                               FontFamily="Courier New,monospace"
+                               FontSize="11"
+                               Foreground="#475569"
+                               VerticalAlignment="Center" />
+                </StackPanel>
+                <Border CornerRadius="2" Background="#22d3ee" Padding="6,2" VerticalAlignment="Center">
+                    <TextBlock Text="{Binding StatusMessage}"
+                               FontSize="11"
+                               FontWeight="SemiBold"
+                               Foreground="#040a0d" />
+                </Border>
+            </StackPanel>
+        </Grid>
+
+        <!-- Rule -->
+        <Border Grid.Row="1" Height="1" Background="#1a2540" Margin="0,0,0,14" />
+
+        <!-- Card grid -->
+        <ScrollViewer Grid.Row="2"
+                      VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Disabled">
+            <ItemsControl ItemsSource="{Binding Services}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="models:ServiceInfo">
+
+                        <Border Classes="ServiceCard"
+                                Width="220"
+                                Margin="6"
+                                CornerRadius="6"
+                                BorderThickness="1"
+                                ClipToBounds="True">
+                            <StackPanel Spacing="0">
+
+                                <!-- ── Card header ── -->
+                                <Border Classes="CardHeader">
+                                    <Grid ColumnDefinitions="*,Auto">
+
+                                        <!-- Service name -->
+                                        <TextBlock Grid.Column="0"
+                                                   Text="{Binding Name}"
+                                                   FontFamily="Rajdhani,monospace"
+                                                   FontSize="14"
+                                                   FontWeight="Bold"
+                                                   Foreground="#e2e8f0"
+                                                   TextTrimming="CharacterEllipsis"
+                                                   VerticalAlignment="Center" />
+
+                                        <!-- Status pill -->
+                                        <Border Grid.Column="1"
+                                                Classes="PillRunning"
+                                                VerticalAlignment="Center"
+                                                IsVisible="{Binding Running}">
+                                            <StackPanel Orientation="Horizontal" Spacing="4">
+                                                <Ellipse Width="5" Height="5"
+                                                         Fill="#22c55e"
+                                                         VerticalAlignment="Center" />
+                                                <TextBlock Text="running"
+                                                           FontFamily="Courier New,monospace"
+                                                           FontSize="9"
+                                                           FontWeight="SemiBold"
+                                                           Foreground="#4ade80"
+                                                           VerticalAlignment="Center" />
+                                            </StackPanel>
+                                        </Border>
+
+                                        <Border Grid.Column="1"
+                                                Classes="PillStopped"
+                                                VerticalAlignment="Center"
+                                                IsVisible="{Binding !Running}">
+                                            <StackPanel Orientation="Horizontal" Spacing="4">
+                                                <Ellipse Width="5" Height="5"
+                                                         Fill="#ef4444"
+                                                         VerticalAlignment="Center" />
+                                                <TextBlock Text="stopped"
+                                                           FontFamily="Courier New,monospace"
+                                                           FontSize="9"
+                                                           FontWeight="SemiBold"
+                                                           Foreground="#f87171"
+                                                           VerticalAlignment="Center" />
+                                            </StackPanel>
+                                        </Border>
+
+                                    </Grid>
+                                </Border>
+
+                                <!-- ── Header / body separator ── -->
+                                <Border Height="1" Background="#111d2e" />
+
+                                <!-- ── Card body ── -->
+                                <Border Classes="CardBody">
+                                    <StackPanel Spacing="8">
+
+                                        <!-- Description -->
+                                        <TextBlock Text="{Binding Description}"
+                                                   FontFamily="Courier New,monospace"
+                                                   FontSize="11"
+                                                   Foreground="#4a6480"
+                                                   TextTrimming="CharacterEllipsis"
+                                                   TextWrapping="NoWrap" />
+
+                                        <!-- Port row -->
+                                        <Grid ColumnDefinitions="Auto,*"
+                                              IsVisible="{Binding PortLabel,
+                                                          Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                                            <TextBlock Grid.Column="0"
+                                                       Text="PORT"
+                                                       FontFamily="Courier New,monospace"
+                                                       FontSize="9"
+                                                       FontWeight="SemiBold"
+                                                       Foreground="#2d4a66"
+                                                       VerticalAlignment="Center"
+                                                       Margin="0,0,8,0" />
+                                            <TextBlock Grid.Column="1"
+                                                       Text="{Binding PortLabel}"
+                                                       FontFamily="Courier New,monospace"
+                                                       FontSize="11"
+                                                       Foreground="#22d3ee"
+                                                       TextTrimming="CharacterEllipsis"
+                                                       VerticalAlignment="Center" />
+                                        </Grid>
+
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- ── Body / footer separator ── -->
+                                <Border Height="1" Background="#111d2e" />
+
+                                <!-- ── Card footer — pulse wave ── -->
+                                <Border Background="#060a10" Height="38">
+                                    <ctrl:PulseWaveControl
+                                        ColorMode="{Binding Running,
+                                                    Converter={StaticResource BoolToHealthConverter}}"
+                                        HorizontalAlignment="Stretch"
+                                        VerticalAlignment="Stretch" />
+                                </Border>
+
+                            </StackPanel>
+                        </Border>
+
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+
+    </Grid>
+</UserControl>

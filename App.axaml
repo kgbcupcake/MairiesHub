@@ -1,0 +1,120 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="MairiesHub.App"
+             xmlns:vm="using:MairiesHub.ViewModels"
+             xmlns:views="using:MairiesHub.Views"
+             xmlns:conv="using:MairiesHub.Converters"
+             RequestedThemeVariant="Dark">
+
+    <Application.Resources>
+        <ResourceDictionary>
+            <conv:StringEqualsConverter x:Key="StringEqualsConverter" />
+            <conv:StateToColorConverter x:Key="StateToColorConverter" />
+        </ResourceDictionary>
+    </Application.Resources>
+
+    <Application.DataTemplates>
+        <DataTemplate DataType="vm:DockerViewModel">
+            <views:DockerView />
+        </DataTemplate>
+        <DataTemplate DataType="vm:ServicesViewModel">
+            <views:ServicesView />
+        </DataTemplate>
+        <DataTemplate DataType="vm:WireGuardViewModel">
+            <views:WireGuardView />
+        </DataTemplate>
+        <DataTemplate DataType="vm:OllamaViewModel">
+            <views:OllamaView />
+        </DataTemplate>
+    </Application.DataTemplates>
+
+    <Application.Styles>
+        <FluentTheme />
+
+        <!-- ── Nav button ── -->
+        <Style Selector="Button.NavBtn">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="14,10" />
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
+            <Setter Property="CornerRadius" Value="6" />
+            <Setter Property="Foreground" Value="#9e9e9e" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="Width" Value="148" />
+        </Style>
+        <Style Selector="Button.NavBtn:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#1e1e2d" />
+            <Setter Property="TextElement.Foreground" Value="#e0e0e0" />
+        </Style>
+        <Style Selector="Button.NavBtn:pressed /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#252535" />
+        </Style>
+
+        <!-- ── Card panel ── -->
+        <Style Selector="Border.Card">
+            <Setter Property="Background" Value="#1a1a24" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="Padding" Value="14,10" />
+        </Style>
+
+        <!-- ── Status badge ── -->
+        <Style Selector="Border.StatusBadge">
+            <Setter Property="CornerRadius" Value="4" />
+            <Setter Property="Padding" Value="6,2" />
+        </Style>
+
+        <!-- ── Section header text ── -->
+        <Style Selector="TextBlock.SectionHeader">
+            <Setter Property="FontSize" Value="11" />
+            <Setter Property="Foreground" Value="#616161" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="LetterSpacing" Value="1" />
+        </Style>
+
+        <!-- ── Column header ── -->
+        <Style Selector="TextBlock.ColHeader">
+            <Setter Property="FontSize" Value="11" />
+            <Setter Property="Foreground" Value="#616161" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+        </Style>
+
+        <!-- ── Muted text ── -->
+        <Style Selector="TextBlock.Muted">
+            <Setter Property="Foreground" Value="#757575" />
+            <Setter Property="FontSize" Value="12" />
+        </Style>
+
+        <!-- ── Row separator ── -->
+        <Style Selector="Border.RowSep">
+            <Setter Property="Background" Value="#1e1e2d" />
+            <Setter Property="CornerRadius" Value="6" />
+            <Setter Property="Margin" Value="0,2" />
+            <Setter Property="Padding" Value="10,8" />
+        </Style>
+        <Style Selector="Border.RowSep:pointerover">
+            <Setter Property="Background" Value="#252535" />
+        </Style>
+
+        <!-- ── Start/Stop buttons ── -->
+        <Style Selector="Button.ActionBtn">
+            <Setter Property="FontSize" Value="11" />
+            <Setter Property="Padding" Value="8,3" />
+            <Setter Property="CornerRadius" Value="4" />
+            <Setter Property="BorderThickness" Value="0" />
+        </Style>
+        <Style Selector="Button.StartBtn">
+            <Setter Property="Background" Value="#1b5e20" />
+            <Setter Property="Foreground" Value="#a5d6a7" />
+        </Style>
+        <Style Selector="Button.StartBtn:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#2e7d32" />
+        </Style>
+        <Style Selector="Button.StopBtn">
+            <Setter Property="Background" Value="#4a1010" />
+            <Setter Property="Foreground" Value="#ef9a9a" />
+        </Style>
+        <Style Selector="Button.StopBtn:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#b71c1c" />
+        </Style>
+    </Application.Styles>
+</Application>

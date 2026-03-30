@@ -1,0 +1,114 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:MairiesHub.ViewModels"
+             xmlns:models="using:MairiesHub.Models"
+             x:Class="MairiesHub.Views.OllamaView"
+             x:DataType="vm:OllamaViewModel"
+             Background="#0a0d14">
+
+    <Grid RowDefinitions="Auto,Auto,Auto,Auto,*" Margin="20,16,20,16" VerticalAlignment="Stretch">
+
+        <!-- Header -->
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,14">
+            <StackPanel Orientation="Vertical" Spacing="0" VerticalAlignment="Center">
+                <TextBlock Text="OLLAMA"
+                           FontFamily="Rajdhani,monospace"
+                           FontSize="28"
+                           FontWeight="Bold"
+                           Foreground="#e2e8f0"
+                           LetterSpacing="4" />
+                <Border Height="1.5"
+                        Background="#f59e0b"
+                        HorizontalAlignment="Left"
+                        Width="110"
+                        Margin="0,3,0,0" />
+            </StackPanel>
+
+            <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+                <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center"
+                            IsVisible="{Binding IsLoading}">
+                    <Ellipse Width="6" Height="6" Fill="#22d3ee" />
+                    <TextBlock Text="Refreshing"
+                               FontFamily="Courier New,monospace"
+                               FontSize="11"
+                               Foreground="#475569"
+                               VerticalAlignment="Center" />
+                </StackPanel>
+                <Border CornerRadius="2"
+                        Padding="6,2"
+                        VerticalAlignment="Center">
+                    <Border.Background>
+                        <Binding Path="OllamaStatus" Converter="{StaticResource StateToColorConverter}" />
+                    </Border.Background>
+                    <TextBlock Text="{Binding OllamaStatus}"
+                               FontSize="11"
+                               FontWeight="SemiBold"
+                               Foreground="#0a0d14" />
+                </Border>
+            </StackPanel>
+        </Grid>
+
+        <!-- Horizontal rule -->
+        <Border Grid.Row="1"
+                Height="1"
+                Background="#4df59e0b"
+                Margin="0,0,0,12" />
+
+        <!-- Model count -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="6" Margin="0,0,0,16">
+            <TextBlock Text="Models:" FontSize="13" Foreground="#757575" VerticalAlignment="Center" />
+            <TextBlock Text="{Binding ModelCount}" FontSize="13" Foreground="#e0e0e0" VerticalAlignment="Center" />
+        </StackPanel>
+
+        <!-- Column headers -->
+        <Grid Grid.Row="3"
+              ColumnDefinitions="*,120"
+              Margin="10,0,0,6">
+            <TextBlock Grid.Column="0" Text="MODEL NAME" Classes="ColHeader" />
+            <TextBlock Grid.Column="1" Text="SIZE"       Classes="ColHeader" />
+        </Grid>
+
+        <!-- Models list -->
+        <ScrollViewer Grid.Row="4" VerticalScrollBarVisibility="Auto">
+            <ItemsControl ItemsSource="{Binding Models}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="models:OllamaModel">
+                        <Border Classes="RowSep">
+                            <Grid ColumnDefinitions="*,120" VerticalAlignment="Center">
+
+                                <!-- Name -->
+                                <TextBlock Grid.Column="0"
+                                           Text="{Binding Name}"
+                                           FontSize="13"
+                                           Foreground="#e0e0e0"
+                                           VerticalAlignment="Center" />
+
+                                <!-- Size -->
+                                <StackPanel Grid.Column="1"
+                                            Orientation="Horizontal"
+                                            Spacing="3"
+                                            VerticalAlignment="Center">
+                                    <TextBlock FontSize="13" Foreground="#e0e0e0">
+                                        <TextBlock.Text>
+                                            <Binding Path="SizeGb" StringFormat="{}{0:F1}" />
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                    <TextBlock Text="GB" Classes="Muted" VerticalAlignment="Bottom" />
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+
+        <!-- Empty state -->
+        <TextBlock Grid.Row="4"
+                   Text="No models found"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Foreground="#424242"
+                   FontSize="14"
+                   IsVisible="{Binding !Models.Count}" />
+    </Grid>
+</UserControl>

@@ -1,0 +1,164 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:MairiesHub.ViewModels"
+             xmlns:models="using:MairiesHub.Models"
+             xmlns:conv="using:MairiesHub.Converters"
+             x:Class="MairiesHub.Views.DockerView"
+             x:DataType="vm:DockerViewModel"
+             Background="#0a0d14">
+
+    <UserControl.Resources>
+        <conv:CyberpunkStateConverter x:Key="CyberpunkStateConverter" />
+    </UserControl.Resources>
+
+    <UserControl.Styles>
+        <!-- Base card style with transitions -->
+        <Style Selector="Border.ContainerCard">
+            <Setter Property="Background" Value="#0f1623" />
+            <Setter Property="BorderBrush" Value="#1e3a5f" />
+            <Setter Property="Transitions">
+                <Transitions>
+                    <BrushTransition Property="Background" Duration="0:0:0.15" />
+                    <BrushTransition Property="BorderBrush" Duration="0:0:0.15" />
+                </Transitions>
+            </Setter>
+        </Style>
+        <!-- Hover state -->
+        <Style Selector="Border.ContainerCard:pointerover">
+            <Setter Property="BorderBrush" Value="#99f59e0b" />
+            <Setter Property="Background" Value="#111520" />
+            <Setter Property="BoxShadow" Value="0 0 14 0 #33f59e0b" />
+        </Style>
+    </UserControl.Styles>
+
+    <Grid RowDefinitions="Auto,Auto,*" Margin="20,16,20,16" VerticalAlignment="Stretch">
+
+        <!-- Row 0: Header -->
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,10">
+            <StackPanel Orientation="Vertical" Spacing="0" VerticalAlignment="Center">
+                <TextBlock Text="DOCKER"
+                           FontFamily="Rajdhani,monospace"
+                           FontSize="28"
+                           FontWeight="Bold"
+                           Foreground="#e2e8f0"
+                           LetterSpacing="4" />
+                <Border Height="1.5"
+                        Background="#f59e0b"
+                        HorizontalAlignment="Left"
+                        Width="120"
+                        Margin="0,3,0,0" />
+            </StackPanel>
+
+            <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+                <!-- Refreshing indicator -->
+                <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center"
+                            IsVisible="{Binding IsLoading}">
+                    <Ellipse Width="6" Height="6" Fill="#22d3ee" />
+                    <TextBlock Text="Refreshing"
+                               FontFamily="Courier New,monospace"
+                               FontSize="11"
+                               Foreground="#475569"
+                               VerticalAlignment="Center" />
+                </StackPanel>
+                <!-- Count badge -->
+                <Border CornerRadius="2"
+                        Background="#f59e0b"
+                        Padding="6,2"
+                        VerticalAlignment="Center">
+                    <TextBlock Text="{Binding StatusMessage}"
+                               FontSize="11"
+                               FontWeight="SemiBold"
+                               Foreground="#0a0d14" />
+                </Border>
+            </StackPanel>
+        </Grid>
+
+        <!-- Row 1: Horizontal rule -->
+        <Border Grid.Row="1"
+                Height="1"
+                Background="#4df59e0b"
+                Margin="0,0,0,12" />
+
+        <!-- Row 2: Card grid -->
+        <Grid Grid.Row="2">
+            <ScrollViewer VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Disabled">
+                <ItemsControl ItemsSource="{Binding Containers}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="models:ContainerInfo">
+                            <Border Classes="ContainerCard"
+                                    MinWidth="200"
+                                    MaxWidth="240"
+                                    Margin="6"
+                                    CornerRadius="4"
+                                    Padding="12"
+                                    BorderThickness="1">
+                                <StackPanel Spacing="6">
+
+                                    <!-- Row 1: Status dot + Name -->
+                                    <StackPanel Orientation="Horizontal" Spacing="6">
+                                        <Ellipse Width="10" Height="10"
+                                                 VerticalAlignment="Center"
+                                                 Fill="{Binding State, Converter={StaticResource CyberpunkStateConverter}}" />
+                                        <TextBlock Text="{Binding Name}"
+                                                   FontFamily="Rajdhani,monospace"
+                                                   FontSize="13"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="#e2e8f0"
+                                                   TextTrimming="CharacterEllipsis"
+                                                   VerticalAlignment="Center" />
+                                    </StackPanel>
+
+                                    <!-- Row 2: Image -->
+                                    <TextBlock Text="{Binding Image}"
+                                               FontFamily="Courier New,monospace"
+                                               FontSize="11"
+                                               Foreground="#475569"
+                                               Margin="16,0,0,0"
+                                               TextTrimming="CharacterEllipsis" />
+
+                                    <!-- Row 3: First port (only when ports exist) -->
+                                    <TextBlock Text="{Binding DisplayPort}"
+                                               FontFamily="Courier New,monospace"
+                                               FontSize="10"
+                                               Foreground="#22d3ee"
+                                               Margin="16,0,0,0"
+                                               IsVisible="{Binding PortsVisible}"
+                                               TextTrimming="CharacterEllipsis" />
+
+                                    <!-- Row 4: Health indicator -->
+                                    <StackPanel Orientation="Horizontal" Spacing="4" Margin="16,0,0,0">
+                                        <TextBlock Text="&#x25CF;"
+                                                   FontSize="10"
+                                                   VerticalAlignment="Center"
+                                                   Foreground="{Binding Health, Converter={StaticResource CyberpunkStateConverter}}" />
+                                        <TextBlock Text="{Binding HealthLabel}"
+                                                   FontFamily="Courier New,monospace"
+                                                   FontSize="10"
+                                                   VerticalAlignment="Center"
+                                                   Foreground="{Binding Health, Converter={StaticResource CyberpunkStateConverter}}" />
+                                    </StackPanel>
+
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+
+            <!-- Empty state -->
+            <TextBlock Text="No containers found"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Foreground="#475569"
+                       FontSize="14"
+                       IsVisible="{Binding !Containers.Count}" />
+        </Grid>
+
+    </Grid>
+</UserControl>
