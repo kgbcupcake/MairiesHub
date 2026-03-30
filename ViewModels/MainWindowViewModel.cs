@@ -1,5 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using MairiesHub.Services;
 
 namespace MairiesHub.ViewModels;
 
@@ -16,6 +17,7 @@ public partial class MainWindowViewModel : ViewModelBase
     public WireGuardViewModel WireGuardVm { get; }
     public OllamaViewModel OllamaVm { get; }
     public SystemViewModel SystemVm { get; }
+    public UpdateService UpdateVm { get; }
 
     public MainWindowViewModel()
     {
@@ -24,12 +26,14 @@ public partial class MainWindowViewModel : ViewModelBase
         WireGuardVm = new WireGuardViewModel();
         OllamaVm = new OllamaViewModel();
         SystemVm = new SystemViewModel();
+        UpdateVm = new UpdateService();
 
         _currentPage = DockerVm;
 
         // Fire and forget init — errors are swallowed in each VM
         _ = DockerVm.InitAsync();
         _ = SystemVm.InitAsync();
+        _ = UpdateVm.InitAsync();
     }
 
     [RelayCommand]

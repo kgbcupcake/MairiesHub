@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "/j8bbjIAoxs=",
+  "dgSpecHash": "XthKjH1gKGw=",
   "success": true,
   "projectFilePath": "/mnt/storage/RiderProjects/MairiesHub/MairiesHub.csproj",
   "expectedPackageFiles": [
@@ -28,10 +28,7 @@
     "/home/only/.nuget/packages/skiasharp.nativeassets.macos/2.88.9/skiasharp.nativeassets.macos.2.88.9.nupkg.sha512",
     "/home/only/.nuget/packages/skiasharp.nativeassets.webassembly/2.88.9/skiasharp.nativeassets.webassembly.2.88.9.nupkg.sha512",
     "/home/only/.nuget/packages/skiasharp.nativeassets.win32/2.88.9/skiasharp.nativeassets.win32.2.88.9.nupkg.sha512",
-    "/home/only/.nuget/packages/tmds.dbus.protocol/0.20.0/tmds.dbus.protocol.0.20.0.nupkg.sha512",
-    "/home/only/.nuget/packages/microsoft.netcore.app.runtime.linux-x64/10.0.4/microsoft.netcore.app.runtime.linux-x64.10.0.4.nupkg.sha512",
-    "/home/only/.nuget/packages/microsoft.aspnetcore.app.runtime.linux-x64/10.0.4/microsoft.aspnetcore.app.runtime.linux-x64.10.0.4.nupkg.sha512",
-    "/home/only/.nuget/packages/microsoft.netcore.app.host.linux-x64/10.0.4/microsoft.netcore.app.host.linux-x64.10.0.4.nupkg.sha512"
+    "/home/only/.nuget/packages/tmds.dbus.protocol/0.20.0/tmds.dbus.protocol.0.20.0.nupkg.sha512"
   ],
   "logs": []
 }

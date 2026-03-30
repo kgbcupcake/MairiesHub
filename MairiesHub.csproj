@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>MairiesHub</RootNamespace>
     <AssemblyName>MairiesHub</AssemblyName>
+    <Version>1.0.0</Version>
   </PropertyGroup>
 
   <!-- AppImage / self-contained publish settings -->

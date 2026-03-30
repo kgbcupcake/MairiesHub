@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MairiesHub")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+40781edafe9f9dd0fa939b7fa79c3f9707710978")]
 [assembly: System.Reflection.AssemblyProductAttribute("MairiesHub")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MairiesHub")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -121,20 +121,70 @@
                     </StackPanel>
                 </StackPanel>
 
-                <!-- Connection indicator -->
+                <!-- Right cluster: update badge + connection indicator -->
                 <StackPanel Grid.Column="2"
                             Orientation="Horizontal"
                             VerticalAlignment="Center"
                             Margin="0,0,16,0"
-                            Spacing="6">
+                            Spacing="10">
+
+                    <!-- Update available badge (hidden when no update) -->
+                    <Button IsVisible="{Binding UpdateVm.UpdateAvailable}"
+                            Command="{Binding UpdateVm.ApplyUpdateCommand}"
+                            Padding="0"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Cursor="Hand">
+                        <Button.Styles>
+                            <Style Selector="Button:pointerover /template/ ContentPresenter">
+                                <Setter Property="Background" Value="Transparent" />
+                            </Style>
+                            <Style Selector="Button:pressed /template/ ContentPresenter">
+                                <Setter Property="Background" Value="Transparent" />
+                            </Style>
+                        </Button.Styles>
+                        <Border Background="#1a0e00"
+                                BorderBrush="#ff8c00"
+                                BorderThickness="1"
+                                CornerRadius="3"
+                                Padding="8,4">
+                            <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                                <Ellipse Width="6" Height="6" Fill="#ff8c00" VerticalAlignment="Center" />
+                                <TextBlock FontFamily="Share Tech Mono,Courier New,Monospace"
+                                           FontSize="11"
+                                           Foreground="#ff8c00"
+                                           VerticalAlignment="Center"
+                                           Text="{Binding UpdateVm.LatestVersion, StringFormat='UPDATE {0}'}" />
+                            </StackPanel>
+                        </Border>
+                    </Button>
+
+                    <!-- Download progress (shown while applying update) -->
+                    <Border IsVisible="{Binding UpdateVm.IsDownloading}"
+                            Background="#1a0e00"
+                            BorderBrush="#ff8c00"
+                            BorderThickness="1"
+                            CornerRadius="3"
+                            Padding="8,4"
+                            Width="120">
+                        <StackPanel Spacing="2">
+                            <TextBlock FontFamily="Share Tech Mono,Courier New,Monospace"
+                                       FontSize="10"
+                                       Foreground="#ff8c00"
+                                       Text="{Binding UpdateVm.DownloadProgress, StringFormat='INSTALLING {0}%'}" />
+                            <ProgressBar Value="{Binding UpdateVm.DownloadProgress}"
+                                         Minimum="0" Maximum="100"
+                                         Height="3"
+                                         Foreground="#ff8c00"
+                                         Background="#2a1800" />
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Connection indicator -->
                     <Ellipse Width="7" Height="7"
                              Fill="{Binding SystemVm.IsConnected,
                                    Converter={x:Static conv:StateToColorConverter.Instance},
                                    ConverterParameter=running}" />
-                    <TextBlock Text="{Binding SystemVm.IsConnected,
-                                     Converter={x:Static conv:StateToColorConverter.Instance}}"
-                               Classes="Muted"
-                               IsVisible="False" />
                 </StackPanel>
             </Grid>
         </Border>
