@@ -1,0 +1,2 @@
+/mnt/storage/RiderProjects/MairiesHub/bin/Release/net10.0/linux-x64/publish/MairiesHub.pdb
+/mnt/storage/RiderProjects/MairiesHub/bin/Release/net10.0/linux-x64/publish/MairiesHub

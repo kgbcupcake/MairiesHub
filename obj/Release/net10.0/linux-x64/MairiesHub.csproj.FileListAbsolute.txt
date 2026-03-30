@@ -230,3 +230,4 @@
 /mnt/storage/RiderProjects/MairiesHub/obj/Release/net10.0/linux-x64/MairiesHub.csproj.Up2Date
 /mnt/storage/RiderProjects/MairiesHub/obj/Release/net10.0/linux-x64/MairiesHub.genruntimeconfig.cache
 /mnt/storage/RiderProjects/MairiesHub/obj/Release/net10.0/linux-x64/ref/MairiesHub.dll
+/mnt/storage/RiderProjects/MairiesHub/obj/Release/net10.0/linux-x64/MairiesHub.sourcelink.json
