@@ -93,7 +93,15 @@ public partial class UpdateService : ObservableObject
             }
         }
 
-        if (assetUrl is null) return;
+        // No downloadable asset — open the release page in the browser instead
+        if (assetUrl is null)
+        {
+            Process.Start(new ProcessStartInfo(_latestRelease.HtmlUrl)
+            {
+                UseShellExecute = true
+            });
+            return;
+        }
 
         var appImagePath = Environment.GetEnvironmentVariable("APPIMAGE");
         if (string.IsNullOrEmpty(appImagePath)) return;
@@ -165,6 +173,9 @@ public partial class UpdateService : ObservableObject
     {
         [JsonPropertyName("tag_name")]
         public string TagName { get; set; } = string.Empty;
+
+        [JsonPropertyName("html_url")]
+        public string HtmlUrl { get; set; } = string.Empty;
 
         [JsonPropertyName("assets")]
         public GitHubAsset[] Assets { get; set; } = [];
