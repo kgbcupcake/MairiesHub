@@ -7,6 +7,14 @@ cd "$PROJECT_ROOT"
 echo "=== MairiesHub AppImage Build ==="
 echo ""
 
+# Cleanup: Remove old build artifacts
+echo "Cleaning up old build artifacts..."
+APPDIR="$PROJECT_ROOT/AppDir"
+rm -rf "$APPDIR"
+rm -f "$PROJECT_ROOT/MairiesHub-x86_64.AppImage"
+echo "✓ Cleaned up old artifacts"
+echo ""
+
 # Step 1: Publish the application
 echo "Step 1: Publishing application as self-contained single binary..."
 dotnet publish -c Release -r linux-x64 --self-contained true -p:PublishSingleFile=true
@@ -19,6 +27,7 @@ echo "Step 2: Creating AppDir structure..."
 APPDIR="$PROJECT_ROOT/AppDir"
 rm -rf "$APPDIR"
 mkdir -p "$APPDIR/usr/bin"
+mkdir -p "$APPDIR/usr/lib"
 mkdir -p "$APPDIR/usr/share/applications"
 mkdir -p "$APPDIR/usr/share/icons/hicolor/256x256/apps"
 
@@ -26,6 +35,16 @@ mkdir -p "$APPDIR/usr/share/icons/hicolor/256x256/apps"
 cp "$PUBLISH_DIR/MairiesHub" "$APPDIR/usr/bin/MairiesHub"
 chmod +x "$APPDIR/usr/bin/MairiesHub"
 echo "✓ Copied binary to AppDir/usr/bin/"
+echo ""
+
+# Step 2b: Move native .so libraries to usr/lib
+echo "Step 2b: Moving native libraries to AppDir/usr/lib..."
+if find "$PUBLISH_DIR" -maxdepth 1 -name "*.so" -o -name "*.so.*" | grep -q .; then
+    find "$PUBLISH_DIR" -maxdepth 1 \( -name "*.so" -o -name "*.so.*" \) -exec mv {} "$APPDIR/usr/lib/" \;
+    echo "✓ Moved native .so libraries to AppDir/usr/lib/"
+else
+    echo "✓ No native .so libraries found (or already moved)"
+fi
 echo ""
 
 # Step 3: Create .desktop file
